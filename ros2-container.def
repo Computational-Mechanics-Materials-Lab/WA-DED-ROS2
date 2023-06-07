@@ -1,0 +1,96 @@
+bootstrap:docker
+From:osrf/ros:humble-desktop-full
+%files
+	libirimager-8.8.5-amd64.deb
+
+%post
+	# Install ROS2 humble
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt -y update
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt install -y aptitude
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC aptitude update
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC aptitude full-upgrade -y
+	#DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y wget gpg
+
+	dpkg --configure -a
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC aptitude install -y curl gnupg ca-certificates
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC aptitude install -y build-essential cmake git python3-vcstools
+
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC aptitude install -y libx11-xcb-dev libxcb-dri3-0 libdrm-dev libgbm-dev libasound2 guvcview
+
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt install -y ros-humble-joint-state-publisher
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt install -y ros-humble-joint-state-publisher-gui
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y freeglut3 freeglut3-dev libusb-1.0-0-dev iputils* usbutils* 
+	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt install -y wget gpg
+	
+	# New Packages
+	# Optris
+	#DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y libirimager-8.8.5-amd64.deb 
+	dpkg -i libirimager-8.8.5-amd64.deb
+	#ir_download_calibration
+
+        # Modbus
+        
+
+
+	# VS Code
+	#DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt install -y wget gpg
+	#wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+	#sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+	#sudo sh -c 'echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+	#rm -f packages.microsoft.gpg		
+	
+	#git clone git://github.com/pymodbus-dev/pymodbus.git
+	#DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y python-pymodbus python-pyasn1 python-twisted-conch
+
+
+        # install vscode and such
+	wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | apt-key add -
+	echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"  > /etc/apt/sources.list.d/vscode.list
+	apt update
+	apt full-upgrade -y
+	apt install -y code libx11-xcb-dev libxcb-dri3-0 libdrm-dev libgbm-dev libasound2 git nano		
+
+
+	# abb install
+	mkdir -p /ws/src
+	cd ws/src
+	rosdep update
+	git clone https://github.com/PickNikRobotics/abb_ros2.git
+	vcs import < abb_ros2/abb.repos
+	rosdep install -r --from-paths . --ignore-src --rosdistro $ROS_DISTRO -y
+	cd /; rm -rf ws
+
+
+#        strip --remove-section=.note.ABI-tag /usr/lib/x86_64-linux-gnu/libQt5Core.so.5.12.8
+
+	# Install ROS Tutorials
+#	$(/opt/ros/noetic/setup.bash)
+#	DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y ros-noetic-ros-tutorials
+#	rosdep init
+#	rosdep update
+#	mkdir -p ~/catkin_ws/src
+#	cd ~/catkin_ws
+#	/opt/ros/noetic/bin/catkin_make
+
+	## build ABB
+	#git clone -b kinetic-devel https://github.com/ros-industrial/abb.git src/abb
+	#git clone -b kinetic-devel https://github.com/ros-industrial/abb_experimental.git src/abb_experimental
+	#rosdep update
+	#rosdep install --from-paths src/ --ignore-src --rosdistro noetic
+	#catkin_make
+
+	## Camera Tools
+	#
+	## ROS Serial Workstation
+	#DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y ros-noetic-rosserial-arduino ros-noetic-rosserial
+	
+
+
+%environment
+
+%runscript
+	
+
+%labels
+Maintainer jhrogers
+Version 0.3
