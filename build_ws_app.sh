@@ -21,6 +21,6 @@ cd ros2_container
 pwd
 module load apptainer/1.0.2
 sudo apptainer build --sandbox ros2_container.image ../WA-DED-ROS2/ros2-container.def
-
+pwd
 # Build ROS2 Packages
-apptainer exec --nv -B /run ../ros2_container/ros2_container.image build_ros2.sh
+apptainer exec --nv -B /run ../ros2_container/ros2_container.image ../WA-DED-ROS2/build_ros2.sh
