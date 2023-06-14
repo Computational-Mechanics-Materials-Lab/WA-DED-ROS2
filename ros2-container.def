@@ -1,7 +1,7 @@
 bootstrap:docker
 From:osrf/ros:humble-desktop-full
 %files
-	libirimager-8.8.5-amd64.deb
+	../WA-DED-ROS2/libirimager-8.8.5-amd64.deb
 
 %post
 	# Install ROS2 humble
@@ -25,7 +25,7 @@ From:osrf/ros:humble-desktop-full
 	# New Packages
 	# Optris
 	#DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y libirimager-8.8.5-amd64.deb 
-	dpkg -i libirimager-8.8.5-amd64.deb
+	dpkg -i ../WA-DED-ROS2/libirimager-8.8.5-amd64.deb
 	#ir_download_calibration
 
         # Modbus
